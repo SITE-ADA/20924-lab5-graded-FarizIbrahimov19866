@@ -141,18 +141,18 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
     }
 
-    public Event updateEventPrice(UUID id, BigDecimal newPrice) {
+    @Override
+    public Event updateEventPrice(UUID id, BigDecimal price) {
 
-        if (newPrice == null || newPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Price cannot be negative");
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
         }
 
         Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        event.setTicketPrice(newPrice);
+        event.setTicketPrice(price);
 
         return eventRepository.save(event);
     }
-
 }
